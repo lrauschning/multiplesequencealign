@@ -1,4 +1,4 @@
-process TCOFFEE_ALNCOMPARE {
+process ULTRAMSATRIC {
     tag "$meta.id"
     label 'process_low'
 
@@ -14,20 +14,26 @@ process TCOFFEE_ALNCOMPARE {
 
     script:
     def args = task.ext.args ?: ''
+    prefix = task.ext.prefix ?: "${meta.id}"
 
     """
+    ultramsatric -i ${msa} -o ${prefix}.scores --id ${meta.id}
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
+    "${task.process}": $(ultramsatric --version)
     END_VERSIONS
     """
+
+
     stub:
     def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
+
     """
+    touch ${prefix}.scores
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
+    "${task.process}": $(ultramsatric --version)
     END_VERSIONS
     """
 }
