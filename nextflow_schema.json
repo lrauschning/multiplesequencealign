@@ -98,6 +98,11 @@
                     "fa_icon": "fas fa-fast-forward",
                     "description": "Calculate the Total Column Score of alignment."
                 },
+                "calc_umsa": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-fast-forward",
+                    "description": "Calculate the ultramsatric score of alignment."
+                },
                 "calc_irmsd": {
                     "type": "boolean",
                     "fa_icon": "fas fa-fast-forward",
