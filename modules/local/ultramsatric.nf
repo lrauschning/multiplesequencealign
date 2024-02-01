@@ -20,7 +20,8 @@ process ULTRAMSATRIC {
     ultramsatric -i ${msa} -o ${prefix}.scores --id ${meta.id}
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}": \$(ultramsatric --version)
+    "${task.process}":
+        ultramsatric: \$(ultramsatric --version)
     END_VERSIONS
     """
 
@@ -33,7 +34,8 @@ process ULTRAMSATRIC {
     touch ${prefix}.scores
 
     cat <<-END_VERSIONS > versions.yml
-    "${task.process}": \$(ultramsatric --version)
+    "${task.process}":
+        ultramsatric: \$(ultramsatric --version)
     END_VERSIONS
     """
 }
