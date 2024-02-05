@@ -16,6 +16,7 @@ process ULTRAMSATRIC {
     def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
     // compatibility with TCOFFEE/ALNCOMPARE
+    def metric_name = 'umsa'
     def header = meta.keySet().join(",")
     def values = meta.values().join(",")
 
