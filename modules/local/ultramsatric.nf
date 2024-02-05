@@ -28,7 +28,7 @@ process ULTRAMSATRIC {
     echo "${header},${metric_name}" > "${prefix}.scores"
 
     # Add values
-    scores=\$(awk '{sub(/[[:space:]]+\$/, "")} 1' scores.txt | tr -s '[:blank:]' ',')
+    scores=\$(awk '{sub(/[[:space:]]+\$/, "")} 1' scores.csv | tr -s '[:blank:]' ',')
     echo "${values},\$scores" >> "${prefix}.scores"
 
     cat <<-END_VERSIONS > versions.yml
