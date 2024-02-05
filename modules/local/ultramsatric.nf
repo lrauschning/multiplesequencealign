@@ -15,9 +15,20 @@ process ULTRAMSATRIC {
     script:
     def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
+    // compatibility with TCOFFEE/ALNCOMPARE
+    def header = meta.keySet().join(",")
+    def values = meta.values().join(",")
 
     """
-    ultramsatric -i ${msa} -o ${prefix}.scores --id ${meta.id}
+    ultramsatric -i ${msa} -o ${prefix}.csv --id ${meta.id}
+
+    # compatibility with TCOFFEE/ALNCOMPARE
+    # Add metadata info to output file
+    echo "${header},${metric_name}" > "${prefix}.scores"
+
+    # Add values
+    scores=\$(awk '{sub(/[[:space:]]+\$/, "")} 1' scores.txt | tr -s '[:blank:]' ',')
+    echo "${values},\$scores" >> "${prefix}.scores"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
