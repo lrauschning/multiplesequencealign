@@ -21,7 +21,7 @@ process ULTRAMSATRIC {
     def values = meta.values().join(",")
 
     """
-    ultramsatric -i ${msa} -o ${prefix}.csv --id ${meta.id}
+    ultramsatric -i ${msa} -o scores.csv --id ${meta.id}
 
     # compatibility with TCOFFEE/ALNCOMPARE
     # Add metadata info to output file
