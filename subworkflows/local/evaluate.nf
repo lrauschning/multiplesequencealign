@@ -119,9 +119,10 @@ workflow EVALUATE {
     sp      = sp_csv.map{ meta, csv -> csv }
     tc      = tc_csv.map{ meta, csv -> csv }
     irmsd   = irmsd_csv.map{ meta, csv -> csv }
+    umsa    = umsa_csv.map{ meta, csv -> csv }
 
-    def number_of_evals = [params.calc_sp, params.calc_tc, params.calc_irmsd].count{ it == true }
-    csvs_stats = sp.mix(tc).mix(irmsd).collect().map{ csvs -> [[id:"summary_eval"], csvs] }
+    def number_of_evals = [params.calc_sp, params.calc_tc, params.calc_umsa, params.calc_irmsd].count{ it == true }
+    csvs_stats = sp.mix(tc).mix(umsa).mix(irmsd).collect().map{ csvs -> [[id:"summary_eval"], csvs] }
     if(number_of_evals >= 2){
         MERGE_EVAL(csvs_stats)
         ch_versions = ch_versions.mix(MERGE_EVAL.out.versions)
