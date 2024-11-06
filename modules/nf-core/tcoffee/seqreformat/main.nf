@@ -2,7 +2,7 @@ process TCOFFEE_SEQREFORMAT {
     tag "$meta.id"
     label 'process_low'
 
-    conda "bioconda::t-coffee=13.46.0.919e8c6b"
+    conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/t-coffee:13.46.0.919e8c6b--hfc96bf3_0':
         'biocontainers/t-coffee:13.46.0.919e8c6b--hfc96bf3_0' }"
@@ -38,7 +38,9 @@ process TCOFFEE_SEQREFORMAT {
     def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch "${prefix}_${seq_reformat_type}.txt"
+    # Otherwise, tcoffee will crash when calling its version
+    export TEMP='./'
+    touch "${prefix}.txt"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -46,5 +48,3 @@ process TCOFFEE_SEQREFORMAT {
     END_VERSIONS
     """
 }
-
-

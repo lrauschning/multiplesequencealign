@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/nf-core/multiplesequencealign/master/assets/schema_input.json",
     "title": "nf-core/multiplesequencealign pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
@@ -10,24 +10,29 @@
             "id": {
                 "type": "string",
                 "pattern": "^\\S+$",
-                "meta": ["id"],
-                "errorMessage": "id/sample name must be provided and cannot contain spaces"
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id"]
             },
             "fasta": {
                 "type": "string",
-                "pattern": "^\\S+\\.fa$",
-                "errorMessage": "fasta file. Must end with .fa"
+                "pattern": "^\\S+\\.f(ast)?a$",
+                "errorMessage": "fasta file. Must end with .fa or .fasta",
+                "default": ""
             },
             "reference": {
-                "type": "string"
+                "type": "string",
+                "default": ""
             },
-            "structures": {
-                "type": "string"
+            "dependencies": {
+                "type": "string",
+                "default": ""
             },
             "template": {
-                "type": "string"
+                "type": "string",
+                "default": ""
             }
         },
-        "required": ["id", "fasta"]
+        "required": ["id"],
+        "anyOf": [{ "required": ["fasta"] }, { "required": ["dependencies"] }]
     }
 }

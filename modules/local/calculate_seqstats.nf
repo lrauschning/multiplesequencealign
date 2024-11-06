@@ -1,4 +1,3 @@
-
 process CALCULATE_SEQSTATS {
     tag "$meta.id"
     label 'process_low'
@@ -12,11 +11,9 @@ process CALCULATE_SEQSTATS {
     tuple val(meta), path(fasta)
 
     output:
-    tuple val(meta), path("*_seqstats.csv"), emit: seqstats
+    tuple val(meta), path("*_seqstats.csv")        , emit: seqstats
     tuple val(meta), path("*_seqstats_summary.csv"), emit: seqstats_summary
-    tuple val(meta), path("*_mqc.tsv"), emit: multiqc_tsv
-    path "versions.yml" , emit: versions
-
+    path "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -24,15 +21,23 @@ process CALCULATE_SEQSTATS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def id = meta.id
     """
-    calc_seqstats.py $id \
+    calc_seqstats.py ${meta.id} \
         ${fasta} \
         "${prefix}_seqstats.csv" \
-        "${prefix}_seqstats_summary.csv" \
-        "${prefix}_multiqc.tsv"
+        "${prefix}_seqstats_summary.csv"
 
-    cat ${prefix}_multiqc.tsv >> "${prefix}_mqc.tsv"
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        python: \$(python --version | sed 's/Python //g')
+    END_VERSIONS
+    """
+
+    stub:
+    prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}_seqstats.csv
+    touch ${prefix}_seqstats_summary.csv
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
